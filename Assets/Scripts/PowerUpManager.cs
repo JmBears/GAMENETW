@@ -8,58 +8,56 @@ public class PowerUpManager : MonoBehaviour
 
     public bool DamageBoostActive = false, ScoreBoostActive = false;
 
-    /*private Coroutine damageBoostTimer;
-    private Coroutine scoreBoostTimer;*/
+    private Coroutine damageBoostTimer;
+    private Coroutine scoreBoostTimer;
 
-   /* private const float powerUpDuration = 10f;*/
+   private const float powerUpDuration = 5f;
 
     public void ActivatePowerUp(GameObject powerUp)
     {
-        if (powerUp.CompareTag("DamageBoost") && !ScoreBoostActive)
+        if (powerUp.CompareTag("DamageBoost"))
         {
             ActivateDamageBoost();
-            Debug.Log("Damage Up");
         }
-        else if (powerUp.CompareTag("ScoreBoost") && !DamageBoostActive)
+        else if (powerUp.CompareTag("ScoreBoost"))
         {
             ActivateScoreBoost();
-            Debug.Log("Score Up");
         }
     }
 
     public void ActivateDamageBoost()
     {
-        DamageBoostActive = true;
-        extraDamage = Random.Range(20f, 100f);
-
-        /*if (damageBoostTimer != null)
+        if (!ScoreBoostActive)
         {
-            StopCoroutine(damageBoostTimer);
-        }*/
+            DamageBoostActive = true;
+            extraDamage = 100f;
+            Debug.Log("DAMAGE UP");
 
-        /*damageBoostTimer = StartCoroutine(TimerCoroutine(powerUpDuration));*/
+            StartCoroutine(TimerCoroutine(powerUpDuration));
+        }
     }
 
     public void ActivateScoreBoost()
     {
-        ScoreBoostActive = true;
-        scoreBonus = 2f;
-
-        /*if (scoreBoostTimer != null)
+        if (!DamageBoostActive)
         {
-            StopCoroutine(scoreBoostTimer);
-        }*/
+            ScoreBoostActive = true;
+            scoreBonus = 2f;
 
-        /*scoreBoostTimer = StartCoroutine(TimerCoroutine(powerUpDuration));*/
+            Debug.Log("SCORE UP");
+
+            StartCoroutine(TimerCoroutine(powerUpDuration));
+        }
     }
 
-    /*private IEnumerator TimerCoroutine(float timer)
+    private IEnumerator TimerCoroutine(float timer)
     {
         
         while (timer > 0)
         {
             yield return new WaitForSeconds(1f);
             timer -= 1f;
+            Debug.Log("Timer: " + timer);
         }
 
         if (DamageBoostActive)
@@ -70,14 +68,16 @@ public class PowerUpManager : MonoBehaviour
         {
             DeactivateScoreBoost();
         }
-    }*/
+    }
     public void DeactivateDamageBoost()
     {
         DamageBoostActive = false;
+        Debug.Log("DAMAGE DOWN");
     }
 
     public void DeactivateScoreBoost()
     {
         ScoreBoostActive = false;
+        Debug.Log("SCORE DOWN");
     }
 }

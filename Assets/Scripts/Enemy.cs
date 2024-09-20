@@ -120,7 +120,7 @@ public class Enemy : MonoBehaviour
         score.UpdateScore();
 
         //  Handles the PowerUp
-        if (Random.value < 0.5f)
+        if (Random.value < 0.15f)
         {
             float randomValue = Random.value;
             GameObject powerUp;
