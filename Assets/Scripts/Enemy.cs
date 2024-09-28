@@ -1,15 +1,18 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviourPunCallbacks
 {
     [SerializeField] private float moveSpeed = 5.0f;
 
     private Transform target = null;
-
-    private void OnEnable(){
+    private bool isDestroyed = false;
+    public override void OnEnable(){
+        base.OnEnable();
         LookAtTarget();
+        isDestroyed = false;
     }
 
     public void SetTarget(Transform target){
@@ -17,6 +20,7 @@ public class Enemy : MonoBehaviour
     }
 
     private void Update(){
+        if (isDestroyed) return;
         Move();
     }
     
@@ -31,5 +35,31 @@ public class Enemy : MonoBehaviour
 
     private void Move(){
         transform.Translate(Vector3.up * moveSpeed * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (isDestroyed) return;
+        if (collision.gameObject.TryGetComponent<Bullet>(out Bullet bullet))
+        {
+            //Got hit by bullet
+            DestroyOverNetwork();
+        }
+    }
+
+    public void DestroyOverNetwork()
+    {
+        // Since the enemy is Instantiated by the Master Client
+        // Only the master client has authority over the object
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.Destroy(this.gameObject);
+        }
+        // If we're not the master client,
+        // We simply set the boolean flag
+        else
+        {
+            isDestroyed = true;
+        }
     }
 }

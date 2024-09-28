@@ -8,7 +8,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
     [SerializeField]
     private List<GameObject> pooledObjects;
     
-    private void Start()
+    private void Awake()
     {
         //initialize the list
         pooledObjects = new List<GameObject>();
@@ -63,4 +63,11 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         return null;
     }
 
+    public void ReturnObjectToPool(GameObject obj)
+    {
+        if (pooledObjects.Contains(obj))
+        {
+            obj.SetActive(false);
+        }
+    }
 }

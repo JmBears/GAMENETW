@@ -19,7 +19,8 @@ public class NetworkManager : SingletonPUN<NetworkManager>
         }
 
         // Spawn the player
-        PhotonNetwork.Instantiate(PLAYER_PREFAB_NAME, Vector3.zero, Quaternion.identity);
+        GameObject player = PhotonNetwork.Instantiate(PLAYER_PREFAB_NAME, Vector3.zero, Quaternion.identity);
+        Debug.Log($"{player}, {player.gameObject.activeInHierarchy}");
     }
 
     public Sprite GetPlayerIcon(int id)

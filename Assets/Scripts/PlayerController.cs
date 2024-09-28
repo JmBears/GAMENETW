@@ -1,6 +1,8 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using UnityEngine;
+using Photon.Realtime;
+using System.Collections;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
@@ -25,6 +27,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (!photonView.IsMine) return;
         InvokeRepeating("ShootBullet", 00.01f, fireRate);
     }
+
     public override void OnDisable()
     {
         base.OnDisable();
@@ -64,13 +67,15 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void ShootBullet()
     {
-        //Instantiate(bullet, transform.position, transform.rotation);
+        Debug.Log("ShootBullet");
+        PhotonNetwork.Instantiate("Bullet", transform.position, transform.rotation);
+        /*
         GameObject bullet = ObjectPoolManager.Instance.GetPooledObject("Bullet");
         if (bullet != null)
         {
             bullet.transform.SetPositionAndRotation(transform.position, transform.rotation);
             bullet.gameObject.SetActive(true);
-        }
+        }*/
     }
 
     

@@ -1,9 +1,12 @@
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner : MonoBehaviourPunCallbacks
 {
+    private const string ENEMY_PREFAB = "Enemy";
     [SerializeField] private float minSpawnInterval = 0.50f;
     [SerializeField] private float maxSpawnInterval = 2.50f;
 
@@ -17,6 +20,9 @@ public class EnemySpawner : MonoBehaviour
     }
 
     private void Update(){
+        // Make sure that only the master client is responsible
+        // for spawning enemies
+        if (!PhotonNetwork.IsMasterClient) return;
         if(spawner != null){
             return;
         }
@@ -31,12 +37,16 @@ public class EnemySpawner : MonoBehaviour
     }
 
     private void SpawnEnemy(){
+        // Instantiate over the network
+        PhotonNetwork.InstantiateRoomObject(ENEMY_PREFAB, GetSpawnPosition(),
+            Quaternion.identity);
          //Instantiate(bullet, transform.position, transform.rotation);
-        GameObject enemy = ObjectPoolManager.Instance.GetPooledObject("Enemy");
+        
+        /*GameObject enemy = ObjectPoolManager.Instance.GetPooledObject("Enemy");
         if(enemy != null){
             enemy.transform.position = GetSpawnPosition();
             enemy.gameObject.SetActive(true);
-        }
+        }*/
     }
 
     private Vector2 GetSpawnPosition(){
