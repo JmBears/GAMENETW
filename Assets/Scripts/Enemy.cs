@@ -42,6 +42,8 @@ public class Enemy : MonoBehaviourPunCallbacks
         if (isDestroyed) return;
         if (collision.gameObject.TryGetComponent<Bullet>(out Bullet bullet))
         {
+            //Grant score to the player that destroyed the enemy
+            ScoreManager.Instance.AddScore(100, bullet.Owner);
             //Got hit by bullet
             DestroyOverNetwork();
         }

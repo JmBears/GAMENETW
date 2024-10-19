@@ -102,7 +102,7 @@ MonoBehaviour:
   maxSpeed: 5
   movementRadius: 1.5
   fireRate: 0.1
-  bullet: {fileID: 3894269820637292156, guid: fe5fc87875ef54344b5ba2db1eb0d6dc, type: 3}
+  baseDamage: 10
   spriteRenderer: {fileID: 0}
 --- !u!114 &-3592802439251687234
 MonoBehaviour:

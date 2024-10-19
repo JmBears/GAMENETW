@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] private float maxSpeed = 5.0f;
     [SerializeField] private float movementRadius = 1.5f;
     [SerializeField] private float fireRate = 0.1f;
-    [SerializeField] private GameObject bullet;
+    [SerializeField] private float baseDamage = 10f;
     [SerializeField] private SpriteRenderer spriteRenderer;
 
     private float currentSpeed;
@@ -67,17 +67,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void ShootBullet()
     {
-        Debug.Log("ShootBullet");
-        PhotonNetwork.Instantiate("Bullet", transform.position, transform.rotation);
-        /*
-        GameObject bullet = ObjectPoolManager.Instance.GetPooledObject("Bullet");
-        if (bullet != null)
+        var bulletObject = PhotonNetwork.Instantiate("Bullet", transform.position, transform.rotation);
+        if(bulletObject.TryGetComponent<Bullet>(out Bullet bullet))
         {
-            bullet.transform.SetPositionAndRotation(transform.position, transform.rotation);
-            bullet.gameObject.SetActive(true);
-        }*/
+            bullet.InitializeValues(baseDamage, photonView.Owner);
+        }
     }
-
     
     public void AssignSprite()
     {

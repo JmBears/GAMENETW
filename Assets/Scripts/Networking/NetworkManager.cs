@@ -6,6 +6,9 @@ using Photon.Pun.UtilityScripts;
 
 public class NetworkManager : SingletonPUN<NetworkManager>
 {
+    // Events:
+    public const byte SCORE_UPDATED_EVENT_CODE = 1;
+
     private const string PLAYER_PREFAB_NAME = "Player";
     [SerializeField]
     private Sprite[] playerIcons;
