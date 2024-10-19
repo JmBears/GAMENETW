@@ -10,8 +10,11 @@ public class NetworkManager : SingletonPUN<NetworkManager>
     [SerializeField]
     private Sprite[] playerIcons;
 
-    private void Start()
+    public bool IsInitialized = false;
+
+    protected override void Awake()
     {
+        base.Awake();
         if (!PhotonNetwork.IsConnected)
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
@@ -20,18 +23,18 @@ public class NetworkManager : SingletonPUN<NetworkManager>
 
         // Spawn the player
         GameObject player = PhotonNetwork.Instantiate(PLAYER_PREFAB_NAME, Vector3.zero, Quaternion.identity);
-        Debug.Log($"{player}, {player.gameObject.activeInHierarchy}");
+        IsInitialized = true;
     }
 
     public Sprite GetPlayerIcon(int id)
     {
-        if (id < playerIcons.Length)
+        if (id > -1 && id < playerIcons.Length)
         {
             return playerIcons[id];
         }
         else
         {
-            Debug.LogError($"Cannot access sprite with id {id}");
+            Debug.LogWarning($"Cannot access sprite with id {id}");
         }
         return null;
     }
