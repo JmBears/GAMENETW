@@ -41,6 +41,10 @@ MonoBehaviour:
   - RespawnSpaceship
   - RPCAssignSprite
   - RPCAssignSprite2
+  - RPCTakeDamage
+  - GameOver
+  - RPCGameOver
+  - RPCRefresh
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

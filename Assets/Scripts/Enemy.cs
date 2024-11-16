@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviourPunCallbacks
     [SerializeField] private float moveSpeed = 5.0f;
 
     [SerializeField] FloatingHealthBar healthBar;
+    [SerializeField] Planet planet;
 
     private float currentHealth, maxHealth;
 
@@ -24,6 +25,8 @@ public class Enemy : MonoBehaviourPunCallbacks
         base.OnEnable();
         LookAtTarget();
         isDestroyed = false;
+
+        planet = GameObject.Find("Planet").GetComponent<Planet>();
 
         maxHealth = Random.Range(50f, 100f);
         currentHealth = maxHealth;
@@ -58,20 +61,27 @@ public class Enemy : MonoBehaviourPunCallbacks
 
         if (collision != null && collision.gameObject != null)
         {
-            if (collision.gameObject.TryGetComponent<Bullet>(out Bullet bullet))
+            if (collision.gameObject.TryGetComponent<Planet>(out Planet planet))
+            {
+                DestroyOverNetwork();
+            }
+
+                if (collision.gameObject.TryGetComponent<Bullet>(out Bullet bullet))
             {
                 if (bullet != null && bullet.Owner != null)
                 {
                     int damagedealt = Random.Range(10, 50);
                     TakeDamage(damagedealt);
 
+                    int hitScore = damagedealt;
                     //Grant score to the player that hits the enemy
-                    ScoreManager.Instance.AddScore(damagedealt, bullet.Owner);
+                    ScoreManager.Instance.AddScore(hitScore, bullet.Owner);
 
                     if (currentHealth <= 0)
                     {
+                        int killScore = 100;
                         //  Whoever got the last hit on the enemy gets the 100 points
-                        ScoreManager.Instance.AddScore(100, bullet.Owner);
+                        ScoreManager.Instance.AddScore(killScore, bullet.Owner);
 
                         DestroyOverNetwork();
                     }
@@ -80,8 +90,13 @@ public class Enemy : MonoBehaviourPunCallbacks
         }
         
     }
+    public void TakeDamage(float damage)
+    {
+        photonView.RPC("RPCTakeDamage", RpcTarget.AllBuffered, damage);
+    }
 
-    private void TakeDamage(float damage)
+    [PunRPC]
+    private void RPCTakeDamage(float damage)
     {
         currentHealth -= damage;
         currentHealth = Mathf.Max(currentHealth, 0);

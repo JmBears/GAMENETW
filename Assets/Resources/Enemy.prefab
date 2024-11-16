@@ -628,3 +628,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemySlider: {fileID: 8490204438850931264}
+  camera: {fileID: 5548746685100062867, guid: d3d0cbe48a5b3084e90b0f64148b23d1, type: 3}
+  target: {fileID: 1197999697048073567}
+  offset: {x: 0, y: 0, z: 0}
